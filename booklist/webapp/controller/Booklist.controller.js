@@ -1,16 +1,28 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
+    "sap/ui/model/resource/ResourceModel",
     "sap/m/MessageBox"
- ], function (Controller) {
+ ], function (Controller, ResourceModel) {
     "use strict";
     return Controller.extend("org.ubb.books.controller.Booklist", {
+
+        onInit : function () {
+            // set i18n model on view
+            var i18nModel = new ResourceModel({
+               bundleName: "org.ubb.books.i18n.i18n"
+            });
+            this.getView().setModel(i18nModel, "i18n");
+         },
        
         onDeleteBook(oEvent) {
             const aSelContexts = this.byId("idBooksTable").getSelectedContexts();
         
             const sPathToBook = aSelContexts[0].getPath();
             this.getView().getModel().remove(sPathToBook);
-            sap.m.MessageBox.success("Book deleted");
+
+            var oBundle = this.getView().getModel("i18n").getResourceBundle();
+            var sMsg = oBundle.getText("deleteMsg");
+            sap.m.MessageBox.success(sMsg);
         },
 
         getDialog : function() {
@@ -60,11 +72,15 @@ sap.ui.define([
                 "Availbooks": parseInt(oAvailable)
             };
 
+            var oBundle = this.getView().getModel("i18n").getResourceBundle();
             this.odataModel = new sap.ui.model.odata.ODataModel("/sap/opu/odata/SAP/Z801_ODATA_IUTA_SRV");
+
             this.odataModel.create('/Z801_BOOK_ENTITY_IUTASet', oBook, null, function() {
-                sap.m.MessageBox.success("Book added!");
+                var sMsg = oBundle.getText("addSuccessMsg");
+                sap.m.MessageBox.success(sMsg);
                 }, function() {
-                    sap.m.MessageBox.error("An error occured. Please check the inserted data.");
+                    var sMsg = oBundle.getText("addErrorMsg");
+                    sap.m.MessageBox.error(sMsg);
                 }
             );
             this.getView().byId("idBooksTable").getModel().refresh(true);
@@ -94,11 +110,15 @@ sap.ui.define([
                 "Availbooks": parseInt(oAvailable)
             };
 
+            var oBundle = this.getView().getModel("i18n").getResourceBundle();
             this.odataModel = new sap.ui.model.odata.ODataModel("/sap/opu/odata/SAP/Z801_ODATA_IUTA_SRV");
+
             this.odataModel.update("/Z801_BOOK_ENTITY_IUTASet('"+oISBN+"')", oBook, null, function(){
-                sap.m.MessageBox.success("Update successful"); 
+                var sMsg = oBundle.getText("updateSuccessMsg");
+                sap.m.MessageBox.success(sMsg); 
                 }, function(){
-                    sap.m.MessageBox.error("An error occured. Please check the inserted data.");
+                    var sMsg = oBundle.getText("updateErrorMsg");
+                    sap.m.MessageBox.error(sMsg);
                 }
             );
             this.getView().byId("idBooksTable").getModel().refresh(true);
