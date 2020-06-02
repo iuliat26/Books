@@ -1,0 +1,65 @@
+<mvc:View
+   xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m">
+
+   <Table id="idBooksTable"
+		items="{
+			path: '/Z801_CHECKEDOUT_ENTITY_IUTASet',
+			sorter: {
+				path: 'Title'
+			}
+		}"
+		growing="true"
+		growingThreshold="10">
+	
+		<columns>
+			<Column>
+				<Text text="First Name" />
+			</Column>
+			<Column>
+				<Text text="Last Name" />
+			</Column>
+			<Column>
+				<Text text="Date Checkout" />
+			</Column>
+			<Column>
+				<Text text="Date Return" />
+			</Column>
+			<Column>
+				<Text text="ISBN" />
+			</Column>
+         	<Column>
+				<Text text="Title" />
+			</Column>
+			<Column>
+				<Text text="Author" />
+			</Column>
+		</columns>
+
+		
+		<items>
+			<ColumnListItem>
+				<cells>
+					<Text text="{Firstname}" />
+					<Text text="{Lastname}" />
+					<Text text="{ 
+							path: 'DateCheckout',
+							type: 'sap.ui.model.type.Date'
+               			}" 
+					/>
+					<Text text="{ 
+							path: 'DateReturn',
+							type: 'sap.ui.model.type.Date'
+               			}" 
+					/>
+					<Text text="{Isbn}" />
+					<Text text="{Title}" />
+					<Text text="{Author}" />
+					
+				</cells>
+			</ColumnListItem>
+		</items>
+	</Table>
+   
+</mvc:View>
